@@ -10,32 +10,70 @@ import org.jgrapht.alg.shortestpath.KShortestPaths;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class IsotopicClusterGraph {
     private double minimum = Double.MAX_VALUE;
     private DefaultDirectedWeightedGraph<IsotopicCluster, Connection> isotopicClusterGraph = new DefaultDirectedWeightedGraph<IsotopicCluster, Connection>(
             Connection.class);
 
+    public IsotopicClusterGraph(List<IsotopicCluster> isotopicSet) {
+        List<IsotopicCluster> isotopicSet2 = new ArrayList<IsotopicCluster>(isotopicSet);
+
+        this.minimum = Double.MAX_VALUE;
+        isotopicSet2.add(new IsotopicCluster("start"));
+
+        for (IsotopicCluster cluster1 : isotopicSet2) {
+            for (IsotopicCluster cluster2 : isotopicSet2) {
+                String color = calculateConnection(cluster1, cluster2);
+
+                // Start
+                if (color != null && cluster1.isNull() && cluster2.isNotNull()) {
+                    connectClusters(cluster1, cluster2, color);
+                }
+
+                // Other
+                if (color != null && cluster1.isNotNull() && cluster2.isNotNull()) {
+                    connectClusters(cluster1, cluster2, color);
+                }
+            }
+        }
+
+        // End
+        List<IsotopicCluster> isotopicClusters = new ArrayList<IsotopicCluster>();
+        for (IsotopicCluster cluster1 : this.isotopicClusterGraph.vertexSet()) {
+            int edgeCount = 0;
+            for (IsotopicCluster cluster2 : this.isotopicClusterGraph.vertexSet()) {
+                edgeCount += this.isotopicClusterGraph.getAllEdges(cluster1, cluster2).size();
+            }
+
+            if (edgeCount == 0) {
+                isotopicClusters.add(cluster1);
+            }
+        }
+
+        IsotopicCluster endCluster = new IsotopicCluster("end");
+        for (IsotopicCluster cluster : isotopicClusters) {
+            connectClusters(cluster, endCluster, "black");
+        }
+    }
+
     public DefaultDirectedWeightedGraph<IsotopicCluster, Connection> getIsotopicClusterGraph() {
         return isotopicClusterGraph;
     }
 
     public GraphPath<IsotopicCluster, Connection> bestPath(IsotopicCluster startCluster, IsotopicCluster endCluster) {
-        KShortestPaths<IsotopicCluster, Connection> kPaths = new KShortestPaths<>(this.isotopicClusterGraph, 999999);
+        KShortestPaths<IsotopicCluster, Connection> kPaths = new KShortestPaths<IsotopicCluster, Connection>(
+                this.isotopicClusterGraph, 999999);
 
         List<GraphPath<IsotopicCluster, Connection>> paths = kPaths.getPaths(startCluster, endCluster);
 
-        Set<Double> weights = new HashSet<Double>();
-        for (GraphPath<IsotopicCluster, Connection> path : paths) {
-            weights.add(path.getWeight());
-        }
-        if (weights.size() == 1 && paths.size() != 1) {
-            System.err.println(
-                    "WARNING: All scores are the same, therefore there is no valid best path! Please check if your input mass spectrum is correct! This could have a minimal impact on the results.");
-        }
+        // Set<Double> weights = new HashSet<Double>();
+        // for (GraphPath<IsotopicCluster, Connection> path : paths) {
+        // weights.add(path.getWeight());
+        // }
+        // if (weights.size() == 1 && paths.size() != 1) {
+        // }
 
         return paths.get(paths.size() - 1);
     }
@@ -101,62 +139,33 @@ public class IsotopicClusterGraph {
         return stringBuilder.toString();
     }
 
-    public IsotopicClusterGraph(List<IsotopicCluster> isotopicSet) {
-        this.minimum = Double.MAX_VALUE;
-        isotopicSet.add(new IsotopicCluster("start"));
-
-        for (IsotopicCluster cluster1 : isotopicSet) {
-            for (IsotopicCluster cluster2 : isotopicSet) {
-                String color = calculateConnection(cluster1, cluster2);
-
-                // Start
-                if (color != null && cluster1.isNull() && cluster2.isNotNull()) {
-                    connectClusters(cluster1, cluster2, color);
-                }
-
-                // Other
-                if (color != null && cluster1.isNotNull() && cluster2.isNotNull()) {
-                    connectClusters(cluster1, cluster2, color);
-                }
-            }
-        }
-
-        // End
-        List<IsotopicCluster> isotopicClusters = new ArrayList<>();
-        for (IsotopicCluster cluster1 : this.isotopicClusterGraph.vertexSet()) {
-            int edgeCount = 0;
-            for (IsotopicCluster cluster2 : this.isotopicClusterGraph.vertexSet()) {
-                edgeCount += this.isotopicClusterGraph.getAllEdges(cluster1, cluster2).size();
-            }
-
-            if (edgeCount == 0) {
-                isotopicClusters.add(cluster1);
-            }
-        }
-
-        IsotopicCluster endCluster = new IsotopicCluster("end");
-        for (IsotopicCluster cluster : isotopicClusters) {
-            connectClusters(cluster, endCluster, "black");
-        }
-    }
-
     public void scoreIsotopicClusterGraph(double peptidMass, int chargeState, PeakList peakList, Configuration config) {
-        Score score = new Score(peptidMass, chargeState, this.isotopicClusterGraph, config);
+        Score score = new Score(peptidMass, chargeState, config);
+        ScoreFive scoreFive = new ScoreFive(this.isotopicClusterGraph, config);
 
         for (Connection connection : this.isotopicClusterGraph.edgeSet()) {
             double scoreSum = 0;
+            double additionalScore = 0;
             if (this.isotopicClusterGraph.getEdgeTarget(connection).isNotNull()) {
                 for (Peak peakX : this.isotopicClusterGraph.getEdgeTarget(connection).getIsotopicCluster()) {
                     for (Peak peakY : peakList.getPeakList()) {
-                        if (peakX.getMz() > peakY.getMz()) {
-                            continue;
-                        }
+                        // if (peakX.getMz() > peakY.getMz()) {
+                        // continue;
+                        // }
 
-                        double scoreResult = score.calculateScore(peakX, peakY,
-                                this.isotopicClusterGraph.getEdgeTarget(connection), connection);
+                        double scoreResult = score.calculateAggregatedScore(peakX.getMz(), peakY.getMz(),
+                                this.isotopicClusterGraph.getEdgeTarget(connection).getIsotopicCluster());
 
-                        scoreSum += scoreResult;
+                        double scoreFiveResult = scoreFive.calculateFifthScore(connection);
+
+                        additionalScore += 0.00001;
+
+                        scoreSum += scoreResult + scoreFiveResult;
                     }
+                }
+
+                if (scoreSum == 0) {
+                    scoreSum = additionalScore;
                 }
                 connection.setScore(scoreSum);
                 this.isotopicClusterGraph.setEdgeWeight(connection, scoreSum);

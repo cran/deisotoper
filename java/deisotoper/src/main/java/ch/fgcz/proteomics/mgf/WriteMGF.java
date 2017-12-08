@@ -13,11 +13,11 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import ch.fgcz.proteomics.dto.MassSpectrometryMeasurement;
+import ch.fgcz.proteomics.dto.MassSpecMeasure;
 import ch.fgcz.proteomics.dto.MassSpectrum;
 
 public class WriteMGF {
-    public static boolean write(String fileName, MassSpectrometryMeasurement massSpectrometryMeasurement) {
+    public static boolean write(String fileName, MassSpecMeasure massSpectrometryMeasurement) {
         File f = new File(fileName);
 
         if (f.exists()) {
@@ -28,40 +28,44 @@ public class WriteMGF {
         return writeConnect(f, massSpectrometryMeasurement);
     }
 
-    private static boolean writeHeader(File fileName, MassSpectrometryMeasurement massSpectrometryMeasurement) {
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)))) {
-            out.println(
-                    "# deisotoped by fbdm algorithm at " + new SimpleDateFormat("yyyy-MM-dd:HH-mm").format(new Date()));
-            out.println("COM=" + massSpectrometryMeasurement.getSource());
-        } catch (IOException e) {
-            return false;
+    private static boolean writeHeader(File fileName, MassSpecMeasure massSpectrometryMeasurement) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
+        out.println("# deisotoped by fbdm algorithm at " + new SimpleDateFormat("yyyy-MM-dd:HH-mm").format(new Date()));
+        out.println("COM=" + massSpectrometryMeasurement.getSource());
         return true;
     }
 
-    private static boolean writeLocal(File fileName, MassSpectrometryMeasurement massSpectrometryMeasurement) {
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)))) {
-            for (MassSpectrum MS : massSpectrometryMeasurement.getMSlist()) {
-                out.println("BEGIN IONS");
+    private static boolean writeLocal(File fileName, MassSpecMeasure massSpectrometryMeasurement) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
 
-                out.println("TITLE=" + MS.getTyp());
-                out.println("PEPMASS=" + MS.getPeptideMass());
-                out.println("CHARGE=" + MS.getChargeState() + "+");
-                out.println("RTINSECONDS=" + MS.getRt());
-                int i = 0;
-                for (i = 0; i < MS.getMz().size(); i++) {
-                    out.println(MS.getMz().get(i) + " " + MS.getIntensity().get(i));
-                }
-                out.println("END IONS");
+        for (MassSpectrum MS : massSpectrometryMeasurement.getMSlist()) {
+            out.println("BEGIN IONS");
+
+            out.println("TITLE=" + MS.getTyp());
+            out.println("PEPMASS=" + MS.getPeptideMass());
+            out.println("CHARGE=" + MS.getChargeState() + "+");
+            out.println("RTINSECONDS=" + MS.getRt());
+            int i = 0;
+            for (i = 0; i < MS.getMz().size(); i++) {
+                out.println(MS.getMz().get(i) + " " + MS.getIntensity().get(i));
             }
-        } catch (IOException e) {
-            return false;
+            out.println("END IONS");
         }
 
         return true;
     }
 
-    private static boolean writeConnect(File fileName, MassSpectrometryMeasurement massSpectrometryMeasurement) {
+    private static boolean writeConnect(File fileName, MassSpecMeasure massSpectrometryMeasurement) {
         boolean header = writeHeader(fileName, massSpectrometryMeasurement);
         boolean local = writeLocal(fileName, massSpectrometryMeasurement);
 

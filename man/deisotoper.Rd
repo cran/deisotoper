@@ -5,9 +5,9 @@
 \alias{deisotope.list}
 \alias{plot.deisotoper}
 \alias{print.deisotoper}
-\alias{getDOTGraphs}
+\alias{dot.deisotoper}
 \alias{summary.deisotoper}
-\alias{getConfig}
+\alias{config.deisotoper}
 \title{Construct a Deisotoper Object}
 \usage{
 deisotoper(amino_acid_masses = list(A = 71.03711, R = 156.10111, N =
@@ -16,7 +16,7 @@ deisotoper(amino_acid_masses = list(A = 71.03711, R = 156.10111, N =
   131.04049, F = 147.06841, P = 97.05276, S = 87.03203, T = 101.04768, W =
   186.07931, Y = 163.06333, V = 99.06841), F1 = 0.8, F2 = 0.5, F3 = 0.1,
   F4 = 0.1, F5 = 0.1, delta = 0.003, errortolerance = 0.3,
-  distance = 1.003, noise = 0, decharge = FALSE, modus = "first",
+  distance = 1.00048, noise = 0, decharge = FALSE, modus = "first",
   comment = "")
 }
 \arguments{
@@ -50,7 +50,18 @@ deisotoper(amino_acid_masses = list(A = 71.03711, R = 156.10111, N =
 deisotoper as list of JavaRef
 }
 \description{
-Construct a Deisotoper Object
+\code{deisotoper} returns a deisotoper object.
+
+\code{deisotope} detects and aggregates peaks which belong to the 
+same isotopic cluster of a given mass spectrum.
+}
+\details{
+Input: a peak peaked mass spectrum.
+
+The algorithm: The deisotoper algorithm detects and aggregates peaks
+which belong to the same isotopic cluster of a given mass spectrum.
+
+Output:
 }
 \examples{
 # EXAMPLE 1
@@ -58,7 +69,7 @@ Construct a Deisotoper Object
 dtoper <- deisotoper()
 
 # return the configuration of dtoper
-config <- getConfig(dtoper)
+config <- config.deisotoper(dtoper)
 
 # example data
 x <- list(mZ = c(110.07172, 111.07504, 129.10249, 130.08649, 147.11302,
@@ -122,11 +133,11 @@ print.deisotoper(dtoper)
 dtoper2 <- deisotoper(delta = 0.005, decharge = TRUE)
 
 # return the configuration of dtoper2
-config2 <- getConfig(dtoper2)
+config2 <- config.deisotoper(dtoper2)
 
 \dontrun{
 # return the GraphViz dot graphs of the above deisotoped data
-xdot <- getDOTGraphs(dtoper)
+xdot <- dot.deisotoper(dtoper)
 
 # draws the isotopic cluster graphs in the browser (html)
   if(require(DiagrammeR)){
@@ -142,5 +153,5 @@ Features-Based Deisotoping Method for Tandem Mass Spectra \url{http://dx.doi.org
 \code{\link{deisotope}}
 }
 \author{
-Lucas Schmidt
+Lucas Schmidt, Christian Panse
 }

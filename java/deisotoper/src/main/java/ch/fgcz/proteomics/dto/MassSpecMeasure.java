@@ -8,8 +8,8 @@ package ch.fgcz.proteomics.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MassSpectrometryMeasurement {
-    private List<MassSpectrum> massSpectrumList = new ArrayList<>();
+public class MassSpecMeasure {
+    private List<MassSpectrum> massSpectrumList = new ArrayList<MassSpectrum>();
     private String source;
 
     public String getSource() {
@@ -20,15 +20,15 @@ public class MassSpectrometryMeasurement {
         return massSpectrumList;
     }
 
-    public MassSpectrometryMeasurement(String source) {
+    public MassSpecMeasure(String source) {
         this.source = source;
-        this.massSpectrumList = new ArrayList<>();
+        this.massSpectrumList = new ArrayList<MassSpectrum>();
     }
 
     public void addMS(String typ, String searchEngine, double[] mz, double[] intensity, double peptideMass, double rt,
             int chargeState, int id) {
-        List<Double> mzValues = new ArrayList<>();
-        List<Double> intensityValues = new ArrayList<>();
+        List<Double> mzValues = new ArrayList<Double>();
+        List<Double> intensityValues = new ArrayList<Double>();
 
         for (int i = 0; i < mz.length || i < intensity.length; i++) {
             mzValues.add(mz[i]);
