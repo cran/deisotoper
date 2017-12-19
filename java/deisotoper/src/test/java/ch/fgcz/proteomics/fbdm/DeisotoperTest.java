@@ -4,35 +4,18 @@ package ch.fgcz.proteomics.fbdm;
  * @author Lucas Schmidt
  * @since 2017-11-23
  */
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Test;
 
 import ch.fgcz.proteomics.dto.MassSpecMeasure;
 import ch.fgcz.proteomics.dto.MassSpectrum;
 
 public class DeisotoperTest {
-    // @Test
-    // TODO (LS) what is this?
-    public void testGenerateIsotopicSetsSyso() {
-        Configuration config = new Configuration(0.8, 0.5, 0.1, 0.1, 0.1, 0.003, 0.3, 1.0, 0, false, "first");
-        List<Double> mz = Arrays.asList(123.0, 125.0, 125.2, 126.0, 126.5, 127.0, 128.5, 129.0, 133.0, 133.2, 134.0,
-                134.2, 135.0, 136.783, 137.0, 138.0, 144.0);
-        List<Double> intensity = Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                1.0, 1.0, 1.0);
-        MassSpectrum massSpectrum = new MassSpectrum(mz, intensity);
-
-        System.out.println("INPUT: " + mz.toString());
-
-        Deisotoper.generateIsotopicSets(new PeakList(massSpectrum), config); // List<IsotopicSet> isotopicSets =
-        System.out.println(
-                "[(125.0, 1.0), (126.0, 1.0), (126.5, 1.0), (127.0, 1.0), (128.5, 1.0), (129.0, 1.0), (133.0, 1.0), (133.2, 1.0), (134.0, 1.0), (134.2, 1.0), (135.0, 1.0), (137.0, 1.0), (138.0, 1.0)]");
-        System.out.println("13");
-    }
-
     @Test
     public void generateIsotopicSets_two_clusters_Interleaved() {
         Configuration config = new Configuration();
@@ -130,29 +113,23 @@ public class DeisotoperTest {
     public void testDeisotopeMSM() {
         String source = "Unit Test Case";
 
-        String typ = "MS2";
-        String searchEngine = "mascot";
         double[] mz = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
         double[] intensity = { 4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 7.0, 8.0, 8.0 };
         double peptidMass = 309.22;
-        double rt = 383.34;
         int chargeState = 2;
         int id = 123;
 
-        String typ2 = "MS2";
-        String searchEngine2 = "mascot";
         double[] mz2 = { 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0 };
         double[] intensity2 = { 65.0, 44.0, 23.0, 88.0, 666.0, 451.0, 44.0, 22.0, 111.0, 1000.0 };
         double peptidMass2 = 203.23;
-        double rt2 = 583.35;
         int chargeState2 = 2;
         int id2 = 124;
 
         MassSpecMeasure massSpectrometryMeasurementIn = new MassSpecMeasure(source);
-        massSpectrometryMeasurementIn.addMS(typ, searchEngine, mz, intensity, peptidMass, rt, chargeState, id);
-        massSpectrometryMeasurementIn.addMS(typ2, searchEngine2, mz2, intensity2, peptidMass2, rt2, chargeState2, id2);
+        massSpectrometryMeasurementIn.addMS(mz, intensity, peptidMass, chargeState, id);
+        massSpectrometryMeasurementIn.addMS(mz2, intensity2, peptidMass2, chargeState2, id2);
 
-        Configuration config = new Configuration(0.8, 0.5, 0.1, 0.1, 0.1, 0.03, 0.3, 1.003, 0, false, "first");
+        Configuration config = new Configuration();
 
         DeisotoperMassSpectrumAdapter deisotoper = new DeisotoperMassSpectrumAdapter(new Deisotoper());
 
@@ -174,36 +151,58 @@ public class DeisotoperTest {
     }
 
     @Test
-    public void testDeisotopeMS() {
-        String source = "Unit Test Case";
-
-        String typ = "MS2";
-        String searchEngine = "mascot";
-        double[] mz = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
-        double[] intensity = { 4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 7.0, 8.0, 8.0 };
+    public void testDeisotopeMsOne() {
+        List<Double> mz = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+        List<Double> intensity = Arrays.asList(4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 7.0, 8.0, 8.0);
         double peptidMass = 309.22;
-        double rt = 383.34;
         int chargeState = 2;
         int id = 123;
 
-        MassSpecMeasure massSpectrometryMeasurementin = new MassSpecMeasure(source);
-        massSpectrometryMeasurementin.addMS(typ, searchEngine, mz, intensity, peptidMass, rt, chargeState, id);
+        MassSpectrum massSpectrum = new MassSpectrum(mz, intensity, peptidMass, chargeState, id);
 
-        Configuration config = new Configuration(0.8, 0.5, 0.1, 0.1, 0.1, 0.03, 0.3, 1.003, 0, false, "first");
+        Configuration config = new Configuration();
 
         DeisotoperMassSpectrumAdapter deisotoper = new DeisotoperMassSpectrumAdapter(new Deisotoper(config));
 
-        MassSpectrum massSpectrumOut = deisotoper.deisotopeMS(massSpectrometryMeasurementin.getMSlist().get(0));
+        MassSpectrum massSpectrumOut = deisotoper.deisotopeMS(massSpectrum);
 
         assertNotEquals("Size of mZ-Values must be not equal, becuase there should be isotopic sets!",
-                massSpectrometryMeasurementin.getMSlist().get(0).getMz().size(), massSpectrumOut.getMz().size());
+                massSpectrum.getMz().size(), massSpectrumOut.getMz().size());
 
-        assertEquals(massSpectrumOut.getMz(), Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0));
+        assertEquals(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0), massSpectrumOut.getMz());
 
-        assertEquals(massSpectrumOut.getIntensity(), Arrays.asList(4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 23.0));
+        assertEquals(Arrays.asList(4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 23.0), massSpectrumOut.getIntensity());
 
-        assertEquals(massSpectrumOut.getIsotope(), Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0));
+        assertEquals(Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0), massSpectrumOut.getIsotope());
 
-        assertEquals(massSpectrumOut.getCharge(), Arrays.asList(1, 1, 1, 1, 1, 1, 1, -1));
+        assertEquals(Arrays.asList(1, 1, 1, 1, 1, 1, 1, -1), massSpectrumOut.getCharge());
+    }
+
+    @Test
+    public void testDeisotopeMsTwo() {
+        List<Double> mz = Arrays.asList(101.0, 102.0, 103.0, 104.0, 106.0, 107.0, 107.5, 108.0, 109.0, 115.0);
+        List<Double> intensity = Arrays.asList(4.0, 4.0, 5.0, 6.0, 6.0, 7.0, 7.0, 7.0, 8.0, 8.0);
+        double peptidMass = 309.22;
+        int chargeState = 2;
+        int id = 123;
+
+        MassSpectrum massSpectrum = new MassSpectrum(mz, intensity, peptidMass, chargeState, id);
+
+        Configuration config = new Configuration();
+
+        DeisotoperMassSpectrumAdapter deisotoper = new DeisotoperMassSpectrumAdapter(new Deisotoper(config));
+
+        MassSpectrum massSpectrumOut = deisotoper.deisotopeMS(massSpectrum);
+
+        assertNotEquals("Size of mZ-Values must be not equal, becuase there should be isotopic sets!",
+                massSpectrum.getMz().size(), massSpectrumOut.getMz().size());
+
+        assertEquals(Arrays.asList(101.0, 102.0, 106.0, 107.5, 115.0), massSpectrumOut.getMz());
+
+        assertEquals(Arrays.asList(4.0, 15.0, 20.0, 7.0, 8.0), massSpectrumOut.getIntensity());
+
+        assertEquals(Arrays.asList(1.0, -1.0, -1.0, 1.0, -1.0), massSpectrumOut.getIsotope());
+
+        assertEquals(Arrays.asList(1, -1, -1, 2, -1), massSpectrumOut.getCharge());
     }
 }

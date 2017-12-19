@@ -12,10 +12,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ch.fgcz.proteomics.dto.MassSpecMeasure;
+import ch.fgcz.proteomics.dto.MassSpecMeasureSerializer;
 
 public class ReadMGF {
+    private static final Logger LOGGER = Logger.getLogger(MassSpecMeasureSerializer.class.getName());
+
+    private ReadMGF() {
+        throw new IllegalStateException("Reader (mgf) class");
+    }
+
     public static MassSpecMeasure read(String fileName) {
         String source = readHeader(fileName);
 
@@ -34,11 +43,6 @@ public class ReadMGF {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(fileName));
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        try {
             String line = "";
             String[] partEqual = line.split("=");
 
@@ -49,57 +53,50 @@ public class ReadMGF {
                     return partEqual[1];
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (FileNotFoundException e1) {
+            LOGGER.log(Level.SEVERE, e1.toString(), e1);
+        } catch (IOException e2) {
+            LOGGER.log(Level.SEVERE, e2.toString(), e2);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    // Should already catched!
+                }
+            }
         }
 
         return null;
     }
 
     private static MassSpecMeasure readLocal(String fileName, MassSpecMeasure massSpectrometryMeasurement) {
-        BufferedReader bufferedreader = null;
+        BufferedReader bufferedReader = null;
         try {
-            bufferedreader = new BufferedReader(new FileReader(fileName));
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+            bufferedReader = new BufferedReader(new FileReader(fileName));
 
-        try {
             String line = "";
             int chargeState = 0;
             int id = 0;
-            String searchEngine = null;
-            String typ = null;
             double peptidMass = 0;
-            double rt = 0;
             List<Double> mz = new ArrayList<Double>();
             List<Double> intensity = new ArrayList<Double>();
 
-            while ((line = bufferedreader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] partEqual = line.split("=");
                 String[] partSpace = line.split(" ");
 
                 if (line.equals("BEGIN IONS")) {
                     chargeState = 0;
                     id = massSpectrometryMeasurement.getMSlist().size();
-                    searchEngine = null;
-                    typ = null;
                     peptidMass = 0;
-                    rt = 0;
                     mz = new ArrayList<Double>();
                     intensity = new ArrayList<Double>();
                 } else if (line.equals("END IONS")) {
-                    massSpectrometryMeasurement.addMS(typ, searchEngine, mz, intensity, peptidMass, rt, chargeState,
-                            id);
+                    massSpectrometryMeasurement.addMS(mz, intensity, peptidMass, chargeState, id);
                 } else if (line.contains("CHARGE")) {
                     chargeState = Integer.parseInt(partEqual[1].substring(0, 1));
-                } else if (line.contains("TITLE")) {
-                    typ = partEqual[1];
-                } else if (line.contains("RTINSECONDS")) {
-                    rt = Double.parseDouble(partEqual[1]);
                 } else if (line.contains("PEPMASS")) {
                     String[] peptidMassSplit = partEqual[1].split(" ");
                     peptidMass = Double.parseDouble(peptidMassSplit[0]);
@@ -109,9 +106,17 @@ public class ReadMGF {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    // Should already catched!
+                }
+            }
         }
 
         return massSpectrometryMeasurement;

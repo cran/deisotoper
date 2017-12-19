@@ -122,7 +122,7 @@ deisotoper <- function(amino_acid_masses = list('A' = 71.03711, 'R' = 156.10111,
                        F1 = 0.8, F2 = 0.5, F3 = 0.1, F4 = 0.1, F5 = 0.1, 
                        delta = 0.003, errortolerance = 0.3, distance = 1.00048, noise = 0.0, 
                        decharge = FALSE, modus = "first", comment = "") {
-  dtoper <- .jnew("ch.fgcz.proteomics.R.FeaturesBasedDeisotoping")
+  dtoper <- .jnew("ch.fgcz.proteomics.r.FeaturesBasedDeisotoping")
   
   if(0.5 > distance || distance > 1.5) {
     stop("distance can not be lower than 0.5 and grater than 1.5!")
@@ -169,10 +169,12 @@ deisotoper <- function(amino_acid_masses = list('A' = 71.03711, 'R' = 156.10111,
     stop("Modus is incorrect. Available modi: 'first' or 'highest'")
   }
   
-  tt <- .jcall(dtoper, "V", "setConfiguration", 
-         as.vector(unlist(amino_acid_masses)), F1, F2, F3, F4, F5, 
-         delta, errortolerance, distance, noise, 
-         decharge, modus)
+  tt <- .jcall(dtoper, "V", "setConfiguration",
+               names(amino_acid_masses),
+               as.vector(unlist(amino_acid_masses)), 
+               F1, F2, F3, F4, F5, 
+               delta, errortolerance, distance, noise, 
+               decharge, modus)
   
   rv <- list(javaRef = dtoper, comment = comment)
   class(rv) <- c('deisotoper', class(rv))
@@ -369,7 +371,7 @@ findNN <- function (q, vec) {
   .jaddClassPath("inst/java/deisotoper.jar")
   .jclassPath()
   
-  jFindNN <- .jnew("ch.fgcz.proteomics.R.Utilities")
+  jFindNN <- .jnew("ch.fgcz.proteomics.r.Utilities")
   
   idx <- .jcall(jFindNN, "[D", "findNNR", as.double(q), as.double(vec))
   

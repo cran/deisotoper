@@ -11,23 +11,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class MassSpecMeasureSerializer {
+    private static final Logger LOGGER = Logger.getLogger(MassSpecMeasureSerializer.class.getName());
+
     public static String serializeToJson(String fileName, MassSpecMeasure massSpectrometryMeasurement) {
         Gson gson = new Gson();
 
         String data = gson.toJson(massSpectrometryMeasurement);
-
-        PrintWriter out = null;
         try {
-            out = new PrintWriter(fileName);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
+            PrintWriter out = new PrintWriter(fileName);
+            out.println(data);
+            out.close();
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-
-        out.println(data);
 
         return data;
     }
@@ -37,32 +40,41 @@ public class MassSpecMeasureSerializer {
 
         String data = null;
 
-        BufferedReader br = null;
+        BufferedReader bufferedReader = null;
         try {
-            br = new BufferedReader(new FileReader(fileName));
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
+            bufferedReader = new BufferedReader(new FileReader(fileName));
 
-        try {
             StringBuilder stringbBuilder = new StringBuilder();
-            String line = br.readLine();
+            String line = bufferedReader.readLine();
 
             while (line != null) {
                 stringbBuilder.append(line);
                 stringbBuilder.append(System.lineSeparator());
-                line = br.readLine();
+                line = bufferedReader.readLine();
             }
             data = stringbBuilder.toString();
+
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                }
+            }
         }
 
         java.lang.reflect.Type type = new TypeToken<MassSpecMeasure>() {
         }.getType();
 
         return gson.fromJson(data, type);
+    }
+
+    private MassSpecMeasureSerializer() {
+        throw new IllegalStateException("Serializer class");
     }
 }

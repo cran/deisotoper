@@ -90,14 +90,10 @@ public class Peak {
         this.intensity = intensity;
     }
 
-    public boolean equals(Peak peak) {
-        if (this.getMz() == peak.getMz() && this.getIntensity() == peak.getIntensity()
+    public boolean equalsPeak(Peak peak) {
+        return peak != null && (this.getMz() == peak.getMz() && this.getIntensity() == peak.getIntensity()
                 && this.getCharge() == peak.getCharge() && this.getIsotope() == peak.getIsotope()
-                && this.getPeakID() == peak.getPeakID() && this.isInSet() == peak.isInSet()) {
-            return true;
-        } else {
-            return false;
-        }
+                && this.getPeakID() == peak.getPeakID() && this.isInSet() == peak.isInSet());
     }
 
     @Override

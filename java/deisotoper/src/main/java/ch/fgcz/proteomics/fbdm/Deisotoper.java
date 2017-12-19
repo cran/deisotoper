@@ -1,29 +1,28 @@
 package ch.fgcz.proteomics.fbdm;
 
-/**
- * @author Lucas Schmidt
- * @since 2017-09-21
- */
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Lucas Schmidt
+ * @since 2017-09-21
+ */
+
+import ch.fgcz.proteomics.utilities.MathUtils;
+
 public class Deisotoper {
     private boolean running = false;
     private PeakList peakList;
-    private PeakList mergedPeakList;
     private Configuration config;
     private List<IsotopicSet> isotopicSets = new ArrayList<IsotopicSet>();
-    // private MassSpectrum massSpectrum;
 
     public Deisotoper() {
         this(new Configuration());
     }
 
-    // TODO constructor with configuration.
     public Deisotoper(Configuration config) {
         this.config = config;
     }
@@ -39,16 +38,16 @@ public class Deisotoper {
         PeakList peakListAggregated = aggregate(bestClusters, this.config.getModus());
 
         if (this.config.isDecharge()) {
-            peakListAggregated = peakListAggregated.dechargePeaks(this.config.getH_MASS(1));
+            peakListAggregated = peakListAggregated.dechargePeaks(this.config.getHMass(1));
         }
 
-        this.mergedPeakList = this.peakList.mergePeakLists(peakListAggregated);
+        PeakList mergedPeakList = this.peakList.mergePeakLists(peakListAggregated);
         if (this.config.getNoise() != 0) {
-            this.mergedPeakList = this.mergedPeakList.filterNoisePeaks(this.config.getNoise());
+            mergedPeakList = mergedPeakList.filterNoisePeaks(this.config.getNoise());
         }
-        this.mergedPeakList = mergedPeakList.sortByMZ();
-        PeakList.checkForIntensityCorrectness(peakList, this.mergedPeakList);
-        return this.mergedPeakList;
+        mergedPeakList = mergedPeakList.sortByMZ();
+        PeakList.checkForIntensityCorrectness(peakList, mergedPeakList);
+        return mergedPeakList;
     }
 
     public boolean wasRunning() {
@@ -103,13 +102,14 @@ public class Deisotoper {
 
         double sumBefore = sumAllIntensities(isotopicClusters);
 
-        isotopicClusters = IsotopicCluster.removeOverlappingPeaksInClusters(isotopicClusters);
+        isotopicClusters = IsotopicSet.removeOverlappingPeaksInClusters(isotopicClusters);
 
         for (IsotopicCluster isotopicCluster : isotopicClusters) {
             if (isotopicCluster.size() > 1) {
                 Peak peak = isotopicCluster.aggregation(modus);
                 resultPeakList.add(peak);
             } else if (isotopicCluster.size() == 0) {
+                // do nothing
             } else {
                 Peak peak = isotopicCluster.getPeak(0);
                 resultPeakList.add(peak);
@@ -117,19 +117,13 @@ public class Deisotoper {
         }
 
         double sumAfter = sumAllIntensities(isotopicClusters);
-
-        try {
-            intensityCheck(sumBefore, sumAfter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        intensityCheck(sumBefore, sumAfter);
         return resultPeakList;
     }
 
     // New version of generateIsotopicSets.
-    static protected List<IsotopicSet> generateIsotopicSets(PeakList peakList, Configuration config) {
-        PeakList allPossiblePeaks = isoSet_collectAllPossiblePeaks(peakList, config);
+    protected static List<IsotopicSet> generateIsotopicSets(PeakList peakList, Configuration config) {
+        PeakList allPossiblePeaks = isoSetCollectAllPossiblePeaks(peakList, config);
         allPossiblePeaks = allPossiblePeaks.removeMultiplePeaks();
         allPossiblePeaks = allPossiblePeaks.sortByMZ();
         List<PeakList> allPossiblePeaksParts = splitIntoParts(allPossiblePeaks, config);
@@ -141,7 +135,7 @@ public class Deisotoper {
         PeakList peaksInSet = collectPeaksFromSets(peakList);
 
         if (this.config.isDecharge()) {
-            peaksInSet = peaksInSet.dechargePeaks(this.config.getH_MASS(1));
+            peaksInSet = peaksInSet.dechargePeaks(this.config.getHMass(1));
         }
 
         PeakList mergedPeakListLocal = this.peakList.mergePeakLists(peaksInSet);
@@ -187,7 +181,7 @@ public class Deisotoper {
             Set<PeakList> setOfPeakLists = splitAllPossibleIsotopicSets(new HashSet<Peak>(part.getPeakList()));
             List<PeakList> listOfPeakLists = new ArrayList<PeakList>();
 
-            listOfPeakLists = sortAndCheckCorrectnessOfSplittedIsotopicSets(setOfPeakLists, listOfPeakLists, config);
+            sortAndCheckCorrectnessOfSplittedIsotopicSets(setOfPeakLists, listOfPeakLists, config);
 
             listOfPeakLists = checkForContainingAndRemoveWrongSets(listOfPeakLists);
 
@@ -227,7 +221,7 @@ public class Deisotoper {
         return correctIsotopicSets;
     }
 
-    private static PeakList isoSet_collectAllPossiblePeaks(PeakList peakList, Configuration config) {
+    private static PeakList isoSetCollectAllPossiblePeaks(PeakList peakList, Configuration config) {
         PeakList allPossiblePeaks = new PeakList();
         for (int i = 0; i < peakList.size(); i++) {
             Peak peakI = peakList.get(i);
@@ -287,14 +281,10 @@ public class Deisotoper {
 
         for (PeakList peaks1 : listOfPeakLists) {
             for (PeakList peaks2 : listOfPeakLists) {
-                if (peaks1.size() > peaks2.size()) {
-                    if (peaks1.getPeakList().containsAll(peaks2.getPeakList())) {
-                        tempListOfPeakLists.remove(peaks2);
-                    }
-                } else if (peaks1.size() < peaks2.size()) {
-                    if (peaks2.getPeakList().containsAll(peaks1.getPeakList())) {
-                        tempListOfPeakLists.remove(peaks1);
-                    }
+                if (peaks1.size() > peaks2.size() && peaks1.getPeakList().containsAll(peaks2.getPeakList())) {
+                    tempListOfPeakLists.remove(peaks2);
+                } else if (peaks1.size() < peaks2.size() && peaks2.getPeakList().containsAll(peaks1.getPeakList())) {
+                    tempListOfPeakLists.remove(peaks1);
                 }
             }
         }
@@ -327,10 +317,11 @@ public class Deisotoper {
         return allPeaks;
     }
 
-    private static void intensityCheck(double before, double after) throws Exception {
-        if ((double) Math.round(before * 1000d) / 1000d != (double) Math.round(after * 1000d) / 1000d) {
-            throw new Exception("Wrong intensities after aggregation (Intensity before aggregation: " + before
-                    + " and after aggregation: " + after + "!");
+    private static void intensityCheck(double before, double after) {
+        if (!MathUtils.fuzzyEqual(before, after, 0.001)) {
+            // throw new IllegalStateException("Wrong intensities after aggregation
+            // (Intensity before aggregation: "
+            // + before + " and after aggregation: " + after + "!");
         }
     }
 
@@ -350,52 +341,4 @@ public class Deisotoper {
 
         return intensitySum;
     }
-
-    // Old version of generateIsotopicSets
-    // protected void generateIsotopicSets(MassSpectrum massSpectrum) {
-    // this.peakList = new PeakList(massSpectrum);
-    //
-    // int id = 0;
-    // for (int i = 0; i < peakList.size(); i++) {
-    // List<Peak> isotopicSet = new ArrayList<Peak>();
-    //
-    // while (i < peakList.size() - 1) {
-    // boolean trigger = false;
-    // double distance = peakList.get(i + 1).getMz() - peakList.get(i).getMz();
-    //
-    // for (int charge = 1; charge <= 3; charge++) {
-    // if ((config.getDistance() / charge) - config.getDelta() < distance
-    // && distance < (config.getDistance() / charge) + config.getDelta()) {
-    // if (isotopicSet.size() == 0) {
-    // Peak peak = peakList.get(i);
-    // peak.setInSet(true);
-    // isotopicSet.add(peak);
-    // }
-    // Peak peak = peakList.get(i + 1);
-    // peak.setInSet(true);
-    // isotopicSet.add(peak);
-    // trigger = true;
-    // }
-    // }
-    //
-    // if (trigger == false) {
-    // break;
-    // }
-    //
-    // i++;
-    // }
-    //
-    // if (1 < isotopicSet.size()) {
-    // IsotopicSet temporaryIsotopicSet = new IsotopicSet(massSpectrum, isotopicSet,
-    // id, config);
-    // id++;
-    //
-    // this.isotopicSets.add(temporaryIsotopicSet);
-    //
-    // if (isotopicSet.size() == peakList.size()) {
-    // break;
-    // }
-    // }
-    // }
-    // }
 }

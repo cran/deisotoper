@@ -1,10 +1,10 @@
 package ch.fgcz.proteomics.fbdm;
 
-import ch.fgcz.proteomics.dto.MassSpecMeasure;
-import ch.fgcz.proteomics.dto.MassSpectrum;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.fgcz.proteomics.dto.MassSpecMeasure;
+import ch.fgcz.proteomics.dto.MassSpectrum;
 
 public class DeisotoperMassSpectrumAdapter {
     Deisotoper deisotoper;
@@ -25,7 +25,6 @@ public class DeisotoperMassSpectrumAdapter {
     }
 
     public MassSpectrum makeResultSpectrum(MassSpectrum massSpectrum, PeakList peakList) {
-
         List<Double> mz = new ArrayList<Double>();
         List<Double> intensity = new ArrayList<Double>();
         List<Double> isotope = new ArrayList<Double>();
@@ -37,8 +36,7 @@ public class DeisotoperMassSpectrumAdapter {
             charge.add(peakList.get(i).getCharge());
         }
 
-        return new MassSpectrum(massSpectrum.getTyp(), massSpectrum.getSearchEngine(), mz, intensity,
-                massSpectrum.getPeptideMass(), massSpectrum.getRt(), massSpectrum.getChargeState(),
+        return new MassSpectrum(mz, intensity, massSpectrum.getPeptideMass(), massSpectrum.getChargeState(),
                 massSpectrum.getId(), charge, isotope);
     }
 

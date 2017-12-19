@@ -1,4 +1,4 @@
-package ch.fgcz.proteomics.R;
+package ch.fgcz.proteomics.r;
 
 /**
  * @author Lucas Schmidt
@@ -6,30 +6,43 @@ package ch.fgcz.proteomics.R;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.fgcz.proteomics.dto.MassSpectrum;
-import ch.fgcz.proteomics.fbdm.*;
+import ch.fgcz.proteomics.fbdm.Configuration;
+import ch.fgcz.proteomics.fbdm.Deisotoper;
+import ch.fgcz.proteomics.fbdm.DeisotoperMassSpectrumAdapter;
 
 public class FeaturesBasedDeisotoping {
-    // private Deisotoper deisotoper = new Deisotoper();
     private DeisotoperMassSpectrumAdapter deisotoper = new DeisotoperMassSpectrumAdapter(new Deisotoper());
     private MassSpectrum massSpectrum = new MassSpectrum();
     private MassSpectrum resultSpectrum = new MassSpectrum();
 
-    public void setConfiguration(double[] aaMass, double F1, double F2, double F3, double F4, double F5, double delta,
-            double errortolerance, double distance, double noise, boolean decharge, String modus) {
+    public void setConfiguration(String[] aaMassNames, double[] aaMassValues, double f1, double f2, double f3, // NOSONAR
+            double f4, double f5, double delta, double errortolerance, double distance, double noise, boolean decharge, // NOSONAR
+            String modus) { // NOSONAR
         Configuration config;
-        if (aaMass.length > 1) {
-            List<Double> aaMassList = new ArrayList<Double>();
-            for (int i = 0; i < aaMass.length; i++) {
-                aaMassList.add(aaMass[i]);
+        if (aaMassValues.length > 1 && aaMassNames.length > 1 && (aaMassNames.length == aaMassValues.length)) {
+            Map<String, Double> aaMass = new HashMap<String, Double>();
+            for (int i = 0; i < aaMassNames.length; i++) {
+                aaMass.put(aaMassNames[i], aaMassValues[i]);
             }
 
-            config = new Configuration(aaMassList, F1, F2, F3, F4, F5, delta, errortolerance, distance, noise, decharge,
-                    modus);
+            config = new Configuration(aaMass, delta, errortolerance, distance, noise, decharge, modus);
+            config.setF(1, f1);
+            config.setF(2, f2);
+            config.setF(3, f3);
+            config.setF(4, f4);
+            config.setF(5, f5);
         } else {
-            config = new Configuration(F1, F2, F3, F4, F5, delta, errortolerance, distance, noise, decharge, modus);
+            config = new Configuration(delta, errortolerance, distance, noise, decharge, modus);
+            config.setF(1, f1);
+            config.setF(2, f2);
+            config.setF(3, f3);
+            config.setF(4, f4);
+            config.setF(5, f5);
         }
 
         this.deisotoper.setConfiguration(config);

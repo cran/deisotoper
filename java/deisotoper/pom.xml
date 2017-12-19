@@ -4,7 +4,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
    <!--     <buildDirectory>/tmp/deisotoper.1.6</buildDirectory>  -->
-	<buildDirectory>../../inst/java/</buildDirectory> 
+	<buildDirectory>../../temp/java/</buildDirectory> 
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -44,5 +44,15 @@
     </dependencies>
     <build>
        <directory>${buildDirectory}</directory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

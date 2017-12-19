@@ -1,15 +1,15 @@
 package ch.fgcz.proteomics.fbdm;
 
-import java.util.List;
+import java.util.Map;
 
 public interface ScoringConfiguration {
-    double getH_MASS(int multiplier);
+    double getHMass(int multiplier);
 
     double getErrorTolerance();
 
-    double getNH_MASS(int charge);
+    double getNhMass(int charge);
 
-    double getCO_MASS(int charge);
+    double getCoMass(int charge);
 
     double getIsotopicPeakDistance();
 
@@ -17,23 +17,17 @@ public interface ScoringConfiguration {
 
     double getMax();
 
-    List<Double> getAaMass();
+    Map<String, Double> getAaMass();
 
-    List<Double> getAaMassDividedTwo();
+    Map<String, Double> getAaMassDividedTwo();
 
-    List<Double> getAaMassDividedThree();
+    Map<String, Double> getAaMassDividedThree();
 
-    double getF1();
+    double getF(int f);
 
-    double getF2();
+    void setF(int f, double value);
 
-    double getF3();
+    double getH2oMass(int charge);
 
-    double getF4();
-
-    double getF5();
-
-    double getH2O_MASS(int charge);
-
-    double getNH3_MASS(int charge);
+    double getNh3Mass(int charge);
 }

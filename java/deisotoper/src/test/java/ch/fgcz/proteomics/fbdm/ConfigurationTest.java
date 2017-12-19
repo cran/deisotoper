@@ -4,30 +4,26 @@ package ch.fgcz.proteomics.fbdm;
  * @author Lucas Schmidt
  * @since 2017-11-23
  */
-
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class ConfigurationTest {
+    private static final double MIN = Double.MIN_VALUE;
+
     @Test
     public void testConfigurationCreation() {
-        Configuration config = new Configuration(Arrays.asList(100.0, 1000.0), 0.839, 0.013, 0.12, 0.171, 0.993, 0.0054,
-                0.3, 1.003, 0, true, "highest");
+        Configuration config = new Configuration(0.0054, 0.3, 1.003, 0, true, "first");
 
-        assertEquals(config.getAaMass(), Arrays.asList(100.0, 1000.0));
-        assertEquals(config.getAaMassDividedTwo(), Arrays.asList(50.0, 500.0));
-        assertEquals(config.getF1(), 0.839, 0);
-        assertEquals(config.getF2(), 0.013, 0);
-        assertEquals(config.getF3(), 0.12, 0);
-        assertEquals(config.getF4(), 0.171, 0);
-        assertEquals(config.getF5(), 0.993, 0);
-        assertEquals(config.getDelta(), 0.0054, 0);
-        assertEquals(config.getErrorTolerance(), 0.3, 0);
-        assertEquals(config.getIsotopicPeakDistance(), 1.003, 0);
-        assertEquals(config.isDecharge(), true);
-        assertEquals(config.getModus(), "highest");
+        assertEquals(0.8, config.getF(1), MIN);
+        assertEquals(0.5, config.getF(2), MIN);
+        assertEquals(0.1, config.getF(3), MIN);
+        assertEquals(0.1, config.getF(4), MIN);
+        assertEquals(0.1, config.getF(5), MIN);
+        assertEquals(0.0054, config.getDelta(), MIN);
+        assertEquals(0.3, config.getErrorTolerance(), MIN);
+        assertEquals(1.003, config.getIsotopicPeakDistance(), MIN);
+        assertEquals("first", config.getModus());
+        assertEquals(true, config.isDecharge());
     }
 }

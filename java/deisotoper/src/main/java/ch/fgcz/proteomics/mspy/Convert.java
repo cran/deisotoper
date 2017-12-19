@@ -11,51 +11,83 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import ch.fgcz.proteomics.dto.MassSpecMeasureSerializer;
+
+/**
+ * @deprecated isn't up to date anymore.
+ */
 @Deprecated
 public class Convert {
+    private static final Logger LOGGER = Logger.getLogger(MassSpecMeasureSerializer.class.getName());
+
+    private Convert() {
+        throw new IllegalStateException("Convert class");
+    }
+
     public static Peaklist msdToPeaklist(String file) {
         List<Double> mz = new ArrayList<Double>();
         List<Double> intensity = new ArrayList<Double>();
         List<Integer> charge = new ArrayList<Integer>();
         List<Double> isotope = new ArrayList<Double>();
 
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
+        BufferedReader bufferedReader = null;
 
         try {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.contains("peak mz")) {
-                    String[] parts = line.split("\"");
-                    if (parts.length <= 7) {
-                        charge.add(-1);
-                        isotope.add(-1.0);
-                    }
-                    for (int i = 0; i < parts.length; i++) {
-                        if (i == 1) {
-                            mz.add(Double.parseDouble(parts[i]));
-                        } else if (i == 3) {
-                            intensity.add(Double.parseDouble(parts[i]));
-                        } else if (i == 7) {
-                            charge.add(Integer.parseInt(parts[i]));
-                        } else if (i == 9) {
-                            isotope.add(Double.parseDouble(parts[i]));
-                        }
-                    }
+            bufferedReader = new BufferedReader(new FileReader(file));
+
+            msdToPeaklistHelper(bufferedReader, mz, intensity, charge, isotope);
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return new Peaklist(mz, intensity, charge, isotope);
+    }
+
+    private static void msdToPeaklistHelper(BufferedReader bufferedReader, List<Double> mz, List<Double> intensity,
+            List<Integer> charge, List<Double> isotope) {
+        try {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                msdToPeaklistHelperWhile(line, mz, intensity, charge, isotope);
+            }
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    private static void msdToPeaklistHelperWhile(String line, List<Double> mz, List<Double> intensity,
+            List<Integer> charge, List<Double> isotope) {
+        if (line.contains("peak mz")) {
+            String[] parts = line.split("\"");
+            if (parts.length <= 7) {
+                charge.add(-1);
+                isotope.add(-1.0);
+            }
+            for (int i = 0; i < parts.length; i++) {
+                if (i == 1) {
+                    mz.add(Double.parseDouble(parts[i]));
+                } else if (i == 3) {
+                    intensity.add(Double.parseDouble(parts[i]));
+                } else if (i == 7) {
+                    charge.add(Integer.parseInt(parts[i]));
+                } else if (i == 9) {
+                    isotope.add(Double.parseDouble(parts[i]));
+                }
+            }
+        }
     }
 
     /**
@@ -81,16 +113,13 @@ public class Convert {
         List<Double> mz = new ArrayList<Double>();
         List<Double> intensity = new ArrayList<Double>();
 
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
+        BufferedReader bufferedReader = null;
 
         try {
+            bufferedReader = new BufferedReader(new FileReader(file));
+
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] parts = line.split(" ");
                 for (int i = 0; i < parts.length; i++) {
                     if (i == 0) {
@@ -101,9 +130,17 @@ public class Convert {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+            }
         }
 
         return new ch.fgcz.proteomics.mspy.Peaklist(mz, intensity);

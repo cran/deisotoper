@@ -1,11 +1,10 @@
-package ch.fgcz.proteomics.R;
+package ch.fgcz.proteomics.r;
 
 /**
  * @author Lucas Schmidt
  * @since 2017-11-20
  */
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

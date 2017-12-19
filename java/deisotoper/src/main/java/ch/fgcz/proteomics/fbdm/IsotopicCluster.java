@@ -1,5 +1,8 @@
 package ch.fgcz.proteomics.fbdm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Lucas Schmidt
  * @since 2017-09-18
@@ -7,47 +10,25 @@ package ch.fgcz.proteomics.fbdm;
 
 import ch.fgcz.proteomics.utilities.MathUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class IsotopicCluster {
-    private List<Peak> isotopicCluster = new ArrayList<Peak>();
+    private List<Peak> clusterPeaks = new ArrayList<Peak>();
     private int charge;
     private int clusterId;
     private String status;
+    private PeakList peakList;
 
     public IsotopicCluster(List<Peak> isotopicCluster, int charge, PeakList peakList, double isotopicPeakDistance,
             double delta) {
         rangeCheck(isotopicCluster, charge, isotopicPeakDistance, delta);
-        this.isotopicCluster = isotopicCluster;
+        this.clusterPeaks = isotopicCluster;
         this.charge = charge;
+        this.peakList = peakList;
     }
 
     public IsotopicCluster(String status) {
-        this.isotopicCluster = null;
+        this.clusterPeaks = null;
         this.charge = 0;
         this.status = status;
-    }
-
-    // TODO not sure if should not bemoved to isotopicSet.
-    static List<IsotopicCluster> removeOverlappingPeaksInClusters(List<IsotopicCluster> isotopicClusters) {
-        // If cluster has same peak/peaks as other cluster.
-        // Remove this peak in the lowest charged cluster.
-        // Aggregate only the non removed cluster and add the remaining peaks from the
-        // overlapping cluster to the resultPeakList.
-
-        for (IsotopicCluster isotopicCluster1 : isotopicClusters) {
-            for (IsotopicCluster isotopicCluster2 : isotopicClusters) {
-                if (isotopicCluster1.equals(isotopicCluster2)) {
-                    continue;
-                }
-
-                if (isotopicCluster1.hasSamePeaks(isotopicCluster2)) {
-                    isotopicCluster1.manipulateWhenHasSamePeaks(isotopicCluster2);
-                }
-            }
-        }
-        return isotopicClusters;
     }
 
     public Peak aggregation(String modus) {
@@ -61,11 +42,11 @@ public class IsotopicCluster {
     }
 
     public Peak getPeak(int i) {
-        return this.isotopicCluster.get(i);
+        return this.clusterPeaks.get(i);
     }
 
     public int size() {
-        return this.isotopicCluster.size();
+        return this.clusterPeaks.size();
     }
 
     public int getClusterID() {
@@ -85,28 +66,20 @@ public class IsotopicCluster {
     }
 
     public List<Peak> getIsotopicCluster() {
-        return isotopicCluster;
+        return clusterPeaks;
     }
 
     public boolean isNotNull() {
-        if (this.isotopicCluster == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.clusterPeaks != null;
     }
 
     public boolean isNull() {
-        if (this.isotopicCluster == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.clusterPeaks == null;
     }
 
     public double sumIntensity() {
         double intensitySum = 0;
-        for (Peak peak : this.isotopicCluster) {
+        for (Peak peak : this.clusterPeaks) {
             intensitySum += peak.getIntensity();
         }
 
@@ -116,7 +89,7 @@ public class IsotopicCluster {
     public boolean hasSamePeaks(IsotopicCluster isotopicClusterToCompare) {
         for (Peak peak1 : this.getIsotopicCluster()) {
             for (Peak peak2 : isotopicClusterToCompare.getIsotopicCluster()) {
-                if (peak1.equals(peak2)) {
+                if (peak1.equalsPeak(peak2)) {
                     return true;
                 }
             }
@@ -125,7 +98,7 @@ public class IsotopicCluster {
         return false;
     }
 
-    private void manipulateWhenHasSamePeaks(IsotopicCluster isotopicCluster) {
+    public void manipulateWhenHasSamePeaks(IsotopicCluster isotopicCluster) {
         if (this.getCharge() > isotopicCluster.getCharge()) {
             this.getIsotopicCluster().removeAll(isotopicCluster.getIsotopicCluster());
         } else if (this.getCharge() < isotopicCluster.getCharge()) {
@@ -145,10 +118,10 @@ public class IsotopicCluster {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(" + this.clusterId + ") [ ");
-        if (this.isotopicCluster == null) {
+        if (this.clusterPeaks == null) {
             return this.status;
         }
-        for (Peak p : this.isotopicCluster) {
+        for (Peak p : this.clusterPeaks) {
             stringBuilder.append(p.getMz() + " ");
         }
         stringBuilder.append("]");
@@ -161,7 +134,7 @@ public class IsotopicCluster {
     }
 
     private Peak rearrangeCluster(double intensitySum) {
-        return new Peak(this.isotopicCluster.get(0).getMz(), intensitySum, this.charge);
+        return new Peak(this.clusterPeaks.get(0).getMz(), intensitySum, this.charge);
 
     }
 
@@ -175,4 +148,18 @@ public class IsotopicCluster {
             }
         }
     }
+
+    /*
+     * public void scoreCluster(Configuration config) { Score score = new
+     * Score(this.peakList.getPeptideMass(), this.peakList.getChargeState(),
+     * config); for (Peak peakX : this.clusterPeaks) {
+     * 
+     * for (Peak peakY : peakList.getPeakList()) { double scoreResult =
+     * score.calculateAggregatedScore(peakX.getMz(), peakY.getMz(),
+     * this.getIsotopicCluster());
+     * 
+     * // double scoreFiveResult = scoreFive.calculateFifthScore(connection);
+     * 
+     * // scoreSum += scoreResult + scoreFiveResult; } } }
+     */
 }

@@ -1,5 +1,10 @@
 package ch.fgcz.proteomics.fbdm;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Lucas Schmidt
  * @since 2017-11-28
@@ -8,26 +13,19 @@ package ch.fgcz.proteomics.fbdm;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.*;
-
 public class ScoreTest {
-    Configuration config;
-    Score score;
-    Peak x1;
-    Peak x2;
+    private static final double MIN = Double.MIN_VALUE;
+    private Configuration config;
+    private Peak x1;
+    private Peak x2;
 
     @Before
     public void initialize() {
-
         config = new Configuration();
 
         x1 = new Peak(100, 10, 1);
-        x2 = new Peak(100 + config.getAaMass().get(1), 10, 2);
-        score = new Score(x1.getMz() + x2.getMz(), 1, config);
-
+        x2 = new Peak(100 + config.getAaMass().get("A"), 10, 2);
+        new Score(x1.getMz() + x2.getMz(), 1, config);
     }
 
     /**
@@ -55,7 +53,7 @@ public class ScoreTest {
         Peak y = new Peak(125.86, 1, 1);
         double score1 = Score.firstAminoAcidDistanceScore(x.getMz(), y.getMz(), config);
 
-        assertEquals(3, score1, 0);
+        assertEquals(3.0, score1, MIN);
 
     }
 
@@ -65,10 +63,10 @@ public class ScoreTest {
 
         Configuration config = new Configuration();
         Peak x1 = new Peak(100, 10, 1);
-        Peak x2 = new Peak(100 + config.getAaMass().get(1), 10, 1);
-        Peak x3 = new Peak(100 + config.getAaMass().get(1) + config.getAaMass().get(2), 10, 1);
-        Peak x4 = new Peak(x3.getMz() + config.getAaMass().get(10), 10, 1);
-        Peak x5 = new Peak(x4.getMz() + config.getAaMass().get(11), 10, 1);
+        Peak x2 = new Peak(100 + config.getAaMass().get("A"), 10, 1);
+        Peak x3 = new Peak(100 + config.getAaMass().get("A") + config.getAaMass().get("G"), 10, 1);
+        Peak x4 = new Peak(x3.getMz() + config.getAaMass().get("C"), 10, 1);
+        Peak x5 = new Peak(x4.getMz() + config.getAaMass().get("N"), 10, 1);
 
         PeakList peaklist = new PeakList();
         peaklist.add(x1).add(x2).add(x3).add(x4).add(x5);
@@ -82,11 +80,11 @@ public class ScoreTest {
         int score5 = score.firstAminoAcidDistanceScore(x5.getMz(), peaklist, config);
 
         // TODO : make a meaningfull test here.
-        assertEquals(score1, 4);
-        assertEquals(score2, 3);
-        assertEquals(score3, 8);
-        assertEquals(score4, 5);
-        assertEquals(score5, 7);
+        assertEquals(5, score1);
+        assertEquals(5, score2);
+        assertEquals(7, score3);
+        assertEquals(2, score4);
+        assertEquals(2, score5);
 
     }
 
@@ -118,7 +116,7 @@ public class ScoreTest {
 
         double score = Score.secondComplementaryMassScore(x.getMz(), y.getMz(), pepmass, charge, cluster, config);
 
-        assertEquals(score, 1, 0);
+        assertEquals(1.0, score, MIN);
     }
 
     /**
@@ -165,7 +163,7 @@ public class ScoreTest {
 
         double score = Score.fourthSupportiveAZIonsScore(x.getMz(), y.getMz(), config);
 
-        assertEquals(score, 1, 0);
+        assertEquals(1.0, score, MIN);
     }
 
     @Test
@@ -174,65 +172,65 @@ public class ScoreTest {
 
     @Test
     public void diff1Test() {
-        assertEquals(Score.diff1(120, 150), -30, 0);
-        assertEquals(Score.diff1(333, 321), 12, 0);
-        assertEquals(Score.diff1(130.99, 999.9), -868.91, 0);
-        assertEquals(Score.diff1(199, 144), 55, 0);
+        assertEquals(-30.0, Score.diff1(120, 150), MIN);
+        assertEquals(12.0, Score.diff1(333, 321), MIN);
+        assertEquals(-868.91, Score.diff1(130.99, 999.9), MIN);
+        assertEquals(55.0, Score.diff1(199, 144), MIN);
     }
 
     @Test
     public void diff2Test() {
-        assertEquals(Score.diff2(120, 150, new Configuration().getH_MASS(1)), 44.5, 0.01);
-        assertEquals(Score.diff2(333, 321, new Configuration().getH_MASS(1)), 171.996, 0);
-        assertEquals(Score.diff2(130.99, 999.9, new Configuration().getH_MASS(1)), -369.464, 0);
-        assertEquals(Score.diff2(199, 144, new Configuration().getH_MASS(1)), 126.496, 0);
+        assertEquals(44.5, Score.diff2(120, 150, new Configuration().getHMass(1)), 0.01);
+        assertEquals(171.996, Score.diff2(333, 321, new Configuration().getHMass(1)), MIN);
+        assertEquals(-369.464, Score.diff2(130.99, 999.9, new Configuration().getHMass(1)), MIN);
+        assertEquals(126.496, Score.diff2(199, 144, new Configuration().getHMass(1)), MIN);
     }
 
     @Test
     public void diff3Test() {
-        assertEquals(Score.diff3(120, 150, new Configuration().getH_MASS(1)), 69.328, 0);
-        assertEquals(Score.diff3(333, 321, new Configuration().getH_MASS(1)), 225.327, 0.01);
-        assertEquals(Score.diff3(130.99, 999.9, new Configuration().getH_MASS(1)), -202.981, 0.01);
-        assertEquals(Score.diff3(199, 144, new Configuration().getH_MASS(1)), 150.328, 0);
+        assertEquals(69.328, Score.diff3(120, 150, new Configuration().getHMass(1)), MIN);
+        assertEquals(225.327, Score.diff3(333, 321, new Configuration().getHMass(1)), 0.01);
+        assertEquals(-202.981, Score.diff3(130.99, 999.9, new Configuration().getHMass(1)), 0.01);
+        assertEquals(150.328, Score.diff3(199, 144, new Configuration().getHMass(1)), MIN);
     }
 
     @Test
     public void diff4Test() {
-        assertEquals(Score.diff4(120, 150, new Configuration().getH_MASS(1)), 19.664, 0);
-        assertEquals(Score.diff4(333, 321, new Configuration().getH_MASS(1)), 118.66, 0.01);
-        assertEquals(Score.diff4(130.99, 999.9, new Configuration().getH_MASS(1)), -535.946, 0);
-        assertEquals(Score.diff4(199, 144, new Configuration().getH_MASS(1)), 102.664, 0);
+        assertEquals(19.664, Score.diff4(120, 150, new Configuration().getHMass(1)), MIN);
+        assertEquals(118.66, Score.diff4(333, 321, new Configuration().getHMass(1)), 0.01);
+        assertEquals(-535.946, Score.diff4(130.99, 999.9, new Configuration().getHMass(1)), MIN);
+        assertEquals(102.664, Score.diff4(199, 144, new Configuration().getHMass(1)), MIN);
     }
 
     @Test
     public void sum1Test() {
-        assertEquals(Score.sum1(120, 150), 270, 0);
-        assertEquals(Score.sum1(333, 321), 654, 0);
-        assertEquals(Score.sum1(130.99, 999.9), 1130.88, 0.01);
-        assertEquals(Score.sum1(199, 144), 343, 0);
+        assertEquals(270.0, Score.sum1(120, 150), MIN);
+        assertEquals(654.0, Score.sum1(333, 321), MIN);
+        assertEquals(1130.88, Score.sum1(130.99, 999.9), 0.01);
+        assertEquals(343.0, Score.sum1(199, 144), MIN);
     }
 
     @Test
     public void sum2Test() {
-        assertEquals(Score.sum2(120, 150, new Configuration().getH_MASS(1)), 195.5, 0.01);
-        assertEquals(Score.sum2(333, 321, new Configuration().getH_MASS(1)), 494.004, 0.01);
-        assertEquals(Score.sum2(130.99, 999.9, new Configuration().getH_MASS(1)), 631.444, 0.01);
-        assertEquals(Score.sum2(199, 144, new Configuration().getH_MASS(1)), 271.504, 0.01);
+        assertEquals(195.5, Score.sum2(120, 150, new Configuration().getHMass(1)), 0.01);
+        assertEquals(494.004, Score.sum2(333, 321, new Configuration().getHMass(1)), 0.01);
+        assertEquals(631.444, Score.sum2(130.99, 999.9, new Configuration().getHMass(1)), 0.01);
+        assertEquals(271.504, Score.sum2(199, 144, new Configuration().getHMass(1)), 0.01);
     }
 
     @Test
     public void sum3Test() {
-        assertEquals(Score.sum3(120, 150, new Configuration().getH_MASS(1)), 170.672, 0);
-        assertEquals(Score.sum3(333, 321, new Configuration().getH_MASS(1)), 440.672, 0);
-        assertEquals(Score.sum3(130.99, 999.9, new Configuration().getH_MASS(1)), 464.962, 0);
-        assertEquals(Score.sum3(199, 144, new Configuration().getH_MASS(1)), 247.672, 0);
+        assertEquals(170.672, Score.sum3(120, 150, new Configuration().getHMass(1)), MIN);
+        assertEquals(440.672, Score.sum3(333, 321, new Configuration().getHMass(1)), MIN);
+        assertEquals(464.962, Score.sum3(130.99, 999.9, new Configuration().getHMass(1)), MIN);
+        assertEquals(247.672, Score.sum3(199, 144, new Configuration().getHMass(1)), MIN);
     }
 
     @Test
     public void sum4Test() {
-        assertEquals(Score.sum4(120, 150, new Configuration().getH_MASS(1)), 220.336, 0);
-        assertEquals(Score.sum4(333, 321, new Configuration().getH_MASS(1)), 547.336, 0);
-        assertEquals(Score.sum4(130.99, 999.9, new Configuration().getH_MASS(1)), 797.926, 0);
-        assertEquals(Score.sum4(199, 144, new Configuration().getH_MASS(1)), 295.336, 0);
+        assertEquals(220.336, Score.sum4(120, 150, new Configuration().getHMass(1)), MIN);
+        assertEquals(547.336, Score.sum4(333, 321, new Configuration().getHMass(1)), MIN);
+        assertEquals(797.926, Score.sum4(130.99, 999.9, new Configuration().getHMass(1)), MIN);
+        assertEquals(295.336, Score.sum4(199, 144, new Configuration().getHMass(1)), MIN);
     }
 }
