@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Test;
 
 public class IsotopicClusterTest {
-    private static final double MIN = Double.MIN_VALUE;
+    private static final double MIN = 0.00000000000000001;
 
     @Test
     public void aggregation() throws Exception {
@@ -49,9 +49,9 @@ public class IsotopicClusterTest {
         peaks.add(new Peak(3.0, 5.0, 1));
         peaks.add(new Peak(1.0, 50.0, 0));
         peaks.add(new Peak(2.0, 5.0, 2));
-        PeakList peaklist = new PeakList(peaks);
+        PeakList peakList = new PeakList(peaks);
         Configuration config = new Configuration();
-        new IsotopicCluster(peaks, 1, peaklist, config.getIsotopicPeakDistance(), config.getDelta());
+        new IsotopicCluster(peaks, 1, peakList, config.getIsotopicPeakDistance(), config.getDelta());
     }
 
     @Test
@@ -146,11 +146,11 @@ public class IsotopicClusterTest {
         List<Peak> peaks = new ArrayList<Peak>();
         peaks.add(new Peak(1.0, 1, 0));
         peaks.add(new Peak(2.0, 1, 1));
-        PeakList peaklist = new PeakList(peaks);
+        PeakList peakList = new PeakList(peaks);
         Configuration config = new Configuration();
 
-        new IsotopicCluster(peaks, 2, peaklist, config.getIsotopicPeakDistance(), config.getDelta());
-        new IsotopicCluster(peaks, 3, peaklist, config.getIsotopicPeakDistance(), config.getDelta());
+        new IsotopicCluster(peaks, 2, peakList, config.getIsotopicPeakDistance(), config.getDelta());
+        new IsotopicCluster(peaks, 3, peakList, config.getIsotopicPeakDistance(), config.getDelta());
     }
 
     @Test

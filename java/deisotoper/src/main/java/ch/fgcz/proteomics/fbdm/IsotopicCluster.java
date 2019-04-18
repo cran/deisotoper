@@ -11,11 +11,12 @@ import java.util.List;
 import ch.fgcz.proteomics.utilities.MathUtils;
 
 public class IsotopicCluster {
-    private List<Peak> clusterPeaks = new ArrayList<Peak>();
+    private List<Peak> clusterPeaks = new ArrayList<>();
     private int charge;
     private int clusterId;
     private String status;
     private PeakList peakList;
+    private double score;
 
     public IsotopicCluster(List<Peak> isotopicCluster, int charge, PeakList peakList, double isotopicPeakDistance,
             double delta) {
@@ -39,6 +40,10 @@ public class IsotopicCluster {
         } else {
             throw new IllegalArgumentException("Modus not found (" + modus + ")");
         }
+    }
+
+    public double getScore() {
+        return score;
     }
 
     public Peak getPeak(int i) {
@@ -149,17 +154,26 @@ public class IsotopicCluster {
         }
     }
 
-    /*
-     * public void scoreCluster(Configuration config) { Score score = new
-     * Score(this.peakList.getPeptideMass(), this.peakList.getChargeState(),
-     * config); for (Peak peakX : this.clusterPeaks) {
-     * 
-     * for (Peak peakY : peakList.getPeakList()) { double scoreResult =
-     * score.calculateAggregatedScore(peakX.getMz(), peakY.getMz(),
-     * this.getIsotopicCluster());
-     * 
-     * // double scoreFiveResult = scoreFive.calculateFifthScore(connection);
-     * 
-     * // scoreSum += scoreResult + scoreFiveResult; } } }
-     */
+    public void scoreCluster(Configuration config) {
+        Score sObj = new Score(this.peakList.getPeptideMass(), this.peakList.getChargeState(), config);
+        double scoreSum = 0;
+        if (this.isNotNull()) {
+            for (Peak peakX : this.clusterPeaks) {
+                for (Peak peakY : peakList.getPeakList()) {
+                    if (!peakX.equalsPeak(peakY)) {
+                        double scoreResult = sObj.calculateAggregatedScore(peakX.getMz(), peakY.getMz(),
+                                this.getIsotopicCluster());
+                        scoreSum += scoreResult;
+                    }
+                }
+            }
+        }
+
+        // Clusters need to have weight so that there is a beth path in the Graph.
+        if (scoreSum == 0) {
+            scoreSum = this.clusterPeaks.size() * peakList.getPeakList().size() * 0.000001;
+        }
+
+        this.score = scoreSum;
+    }
 }

@@ -1,0 +1,304 @@
+digraph {
+rankdir=LR;
+node [shape=box];
+"(0) [  (271) 696.33  (272) 697.33 ] z:1" -> "(2) [  (272) 697.33  (273) 697.66 ] z:3"[color="red",label="102.4",weight="102.39999999999979"];
+"(0) [  (271) 696.33  (272) 697.33 ] z:1" -> "(3) [  (272) 697.33  (273) 697.66  (274) 698.0 ] z:3"[color="red",label="164.7",weight="164.69999999999996"];
+"(0) [  (271) 696.33  (272) 697.33 ] z:1" -> "(4) [  (272) 697.33  (275) 698.33 ] z:1"[color="red",label="107.2",weight="107.19999999999972"];
+"(0)
+[  (271) 696.33  (272) 697.33 ] z:1" -> "(5) [  (273) 697.66  (274) 698.0
+]
+z:3"[color="black",label="115.3",weight="115.2999999999997"];
+"(0)
+[  (271) 696.33  (272) 697.33 ] z:1" -> "(6) [  (273) 697.66  (274)
+698.0  (275) 698.33 ]
+z:3"[color="black",label="173.1",weight="173.1"];
+"(0) [  (271)
+696.33  (272) 697.33 ] z:1" -> "(7) [  (273) 697.66  (276) 698.66 ]
+z:1"[color="black",label="119.5",weight="119.4999999999997"];
+"(0)
+[  (271) 696.33  (272) 697.33 ] z:1" -> "(8) [  (274) 698.0  (275) 698.33
+]
+z:3"[color="black",label="120.1",weight="120.09999999999967"];
+"(0)
+[  (271) 696.33  (272) 697.33 ] z:1" -> "(9) [  (274) 698.0  (275)
+698.33  (276) 698.66 ]
+z:3"[color="black",label="186.6",weight="186.6"];
+"(0) [  (271)
+696.33  (272) 697.33 ] z:1" -> "(10) [  (275) 698.33  (276) 698.66 ]
+z:3"[color="black",label="124.8",weight="124.79999999999968"];
+"(1)
+[  (271) 696.33  (272) 697.33  (275) 698.33 ] z:1" -> "(2) [  (272)
+697.33  (273) 697.66 ]
+z:3"[color="red",label="102.4",weight="102.39999999999979"];
+"(1)
+[  (271) 696.33  (272) 697.33  (275) 698.33 ] z:1" -> "(3) [  (272)
+697.33  (273) 697.66  (274) 698.0 ]
+z:3"[color="red",label="164.7",weight="164.69999999999996"];
+"(1)
+[  (271) 696.33  (272) 697.33  (275) 698.33 ] z:1" -> "(4) [  (272)
+697.33  (275) 698.33 ]
+z:1"[color="red",label="107.2",weight="107.19999999999972"];
+"(1)
+[  (271) 696.33  (272) 697.33  (275) 698.33 ] z:1" -> "(10) [  (275)
+698.33  (276) 698.66 ]
+z:3"[color="red",label="124.8",weight="124.79999999999968"];
+"(2)
+[  (272) 697.33  (273) 697.66 ] z:3" -> "(5) [  (273) 697.66  (274) 698.0
+] z:3"[color="red",label="115.3",weight="115.2999999999997"];
+"(2)
+[  (272) 697.33  (273) 697.66 ] z:3" -> "(6) [  (273) 697.66  (274)
+698.0  (275) 698.33 ]
+z:3"[color="red",label="173.1",weight="173.1"];
+"(2) [  (272)
+697.33  (273) 697.66 ] z:3" -> "(7) [  (273) 697.66  (276) 698.66 ]
+z:1"[color="red",label="119.5",weight="119.4999999999997"];
+"(2)
+[  (272) 697.33  (273) 697.66 ] z:3" -> "(8) [  (274) 698.0  (275) 698.33
+]
+z:3"[color="black",label="120.1",weight="120.09999999999967"];
+"(2)
+[  (272) 697.33  (273) 697.66 ] z:3" -> "(9) [  (274) 698.0  (275)
+698.33  (276) 698.66 ]
+z:3"[color="black",label="186.6",weight="186.6"];
+"(2) [  (272)
+697.33  (273) 697.66 ] z:3" -> "(10) [  (275) 698.33  (276) 698.66 ]
+z:3"[color="black",label="124.8",weight="124.79999999999968"];
+"(3)
+[  (272) 697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(5) [  (273)
+697.66  (274) 698.0 ]
+z:3"[color="red",label="115.3",weight="115.2999999999997"];
+"(3)
+[  (272) 697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(6) [  (273)
+697.66  (274) 698.0  (275) 698.33 ]
+z:3"[color="red",label="173.1",weight="173.1"];
+"(3) [  (272)
+697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(7) [  (273) 697.66  (276)
+698.66 ]
+z:1"[color="red",label="119.5",weight="119.4999999999997"];
+"(3)
+[  (272) 697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(8) [  (274) 698.0
+(275) 698.33 ]
+z:3"[color="red",label="120.1",weight="120.09999999999967"];
+"(3)
+[  (272) 697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(9) [  (274) 698.0
+(275) 698.33  (276) 698.66 ]
+z:3"[color="red",label="186.6",weight="186.6"];
+"(3) [  (272)
+697.33  (273) 697.66  (274) 698.0 ] z:3" -> "(10) [  (275) 698.33  (276)
+698.66 ]
+z:3"[color="black",label="124.8",weight="124.79999999999968"];
+"(4)
+[  (272) 697.33  (275) 698.33 ] z:1" -> "(10) [  (275) 698.33  (276)
+698.66 ]
+z:3"[color="red",label="124.8",weight="124.79999999999968"];
+"(5)
+[  (273) 697.66  (274) 698.0 ] z:3" -> "(8) [  (274) 698.0  (275) 698.33
+]
+z:3"[color="red",label="120.1",weight="120.09999999999967"];
+"(5)
+[  (273) 697.66  (274) 698.0 ] z:3" -> "(9) [  (274) 698.0  (275) 698.33
+(276) 698.66 ]
+z:3"[color="red",label="186.6",weight="186.6"];
+"(5) [  (273)
+697.66  (274) 698.0 ] z:3" -> "(10) [  (275) 698.33  (276) 698.66 ]
+z:3"[color="black",label="124.8",weight="124.79999999999968"];
+"(6)
+[  (273) 697.66  (274) 698.0  (275) 698.33 ] z:3" -> "(8) [  (274) 698.0
+(275) 698.33 ]
+z:3"[color="red",label="120.1",weight="120.09999999999967"];
+"(6)
+[  (273) 697.66  (274) 698.0  (275) 698.33 ] z:3" -> "(9) [  (274) 698.0
+(275) 698.33  (276) 698.66 ]
+z:3"[color="red",label="186.6",weight="186.6"];
+"(6) [  (273)
+697.66  (274) 698.0  (275) 698.33 ] z:3" -> "(10) [  (275) 698.33  (276)
+698.66 ]
+z:3"[color="red",label="124.8",weight="124.79999999999968"];
+"(8)
+[  (274) 698.0  (275) 698.33 ] z:3" -> "(10) [  (275) 698.33  (276)
+698.66 ]
+z:3"[color="red",label="124.8",weight="124.79999999999968"];
+"(9)
+[  (274) 698.0  (275) 698.33  (276) 698.66 ] z:3" -> "(10) [  (275)
+698.33  (276) 698.66 ]
+z:3"[color="red",label="124.8",weight="124.79999999999968"];
+start
+-> "(0) [  (271) 696.33  (272) 697.33 ]
+z:1"[color="black",label="112.6",weight="112.59999999999971"];
+start
+-> "(1) [  (271) 696.33  (272) 697.33  (275) 698.33 ]
+z:1"[color="black",label="170.4",weight="170.39999999999998"];
+"(7)
+[  (273) 697.66  (276) 698.66 ] z:1" ->
+end[color="black",label="0.0",weight="0.0"];
+"(10) [  (275) 698.33
+(276) 698.66 ] z:3" ->
+end[color="black",label="0.0",weight="0.0"];
+}
+
+--001a114ecadcf79b4c0560d97c69
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr">digraph {
+rankdir=3DLR;
+node [shape=3Dbox];
+\&quot;(0) [&=
+nbsp; (271) 696.33&nbsp; (272) 697.33 ] z:1\&quot; -&gt; \&quot;(2) [&nbsp;=
+ (272) 697.33&nbsp; (273) 697.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,lab=
+el=3D\&quot;102.4\&quot;,weight=3D\&quot;102.39999999999979\&quot;];
+\&quo=
+t;(0) [&nbsp; (271) 696.33&nbsp; (272) 697.33 ] z:1\&quot; -&gt; \&quot;(3)=
+ [&nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot;[col=
+or=3D\&quot;red\&quot;,label=3D\&quot;164.7\&quot;,weight=3D\&quot;164.6999=
+9999999996\&quot;];
+\&quot;(0) [&nbsp; (271) 696.33&nbsp; (272) 697.33 ] z=
+:1\&quot; -&gt; \&quot;(4) [&nbsp; (272) 697.33&nbsp; (275) 698.33 ] z:1\&q=
+uot;[color=3D\&quot;red\&quot;,label=3D\&quot;107.2\&quot;,weight=3D\&quot;=
+107.19999999999972\&quot;];
+\&quot;(0) [&nbsp; (271) 696.33&nbsp; (272) 69=
+7.33 ] z:1\&quot; -&gt; \&quot;(5) [&nbsp; (273) 697.66&nbsp; (274) 698.0 ]=
+ z:3\&quot;[color=3D\&quot;black\&quot;,label=3D\&quot;115.3\&quot;,weight=
+=3D\&quot;115.2999999999997\&quot;];
+\&quot;(0) [&nbsp; (271) 696.33&nbsp;=
+ (272) 697.33 ] z:1\&quot; -&gt; \&quot;(6) [&nbsp; (273) 697.66&nbsp; (274=
+) 698.0&nbsp; (275) 698.33 ] z:3\&quot;[color=3D\&quot;black\&quot;,label=
+=3D\&quot;173.1\&quot;,weight=3D\&quot;173.1\&quot;];
+\&quot;(0) [&nbsp; (=
+271) 696.33&nbsp; (272) 697.33 ] z:1\&quot; -&gt; \&quot;(7) [&nbsp; (273) =
+697.66&nbsp; (276) 698.66 ] z:1\&quot;[color=3D\&quot;black\&quot;,label=3D=
+\&quot;119.5\&quot;,weight=3D\&quot;119.4999999999997\&quot;];
+\&quot;(0) =
+[&nbsp; (271) 696.33&nbsp; (272) 697.33 ] z:1\&quot; -&gt; \&quot;(8) [&nbs=
+p; (274) 698.0&nbsp; (275) 698.33 ] z:3\&quot;[color=3D\&quot;black\&quot;,=
+label=3D\&quot;120.1\&quot;,weight=3D\&quot;120.09999999999967\&quot;];
+\&=
+quot;(0) [&nbsp; (271) 696.33&nbsp; (272) 697.33 ] z:1\&quot; -&gt; \&quot;=
+(9) [&nbsp; (274) 698.0&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[=
+color=3D\&quot;black\&quot;,label=3D\&quot;186.6\&quot;,weight=3D\&quot;186=
+.6\&quot;];
+\&quot;(0) [&nbsp; (271) 696.33&nbsp; (272) 697.33 ] z:1\&quot=
+; -&gt; \&quot;(10) [&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[co=
+lor=3D\&quot;black\&quot;,label=3D\&quot;124.8\&quot;,weight=3D\&quot;124.7=
+9999999999968\&quot;];
+\&quot;(1) [&nbsp; (271) 696.33&nbsp; (272) 697.33&=
+nbsp; (275) 698.33 ] z:1\&quot; -&gt; \&quot;(2) [&nbsp; (272) 697.33&nbsp;=
+ (273) 697.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;102.4\&=
+quot;,weight=3D\&quot;102.39999999999979\&quot;];
+\&quot;(1) [&nbsp; (271)=
+ 696.33&nbsp; (272) 697.33&nbsp; (275) 698.33 ] z:1\&quot; -&gt; \&quot;(3)=
+ [&nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot;[col=
+or=3D\&quot;red\&quot;,label=3D\&quot;164.7\&quot;,weight=3D\&quot;164.6999=
+9999999996\&quot;];
+\&quot;(1) [&nbsp; (271) 696.33&nbsp; (272) 697.33&nbs=
+p; (275) 698.33 ] z:1\&quot; -&gt; \&quot;(4) [&nbsp; (272) 697.33&nbsp; (2=
+75) 698.33 ] z:1\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;107.2\&quo=
+t;,weight=3D\&quot;107.19999999999972\&quot;];
+\&quot;(1) [&nbsp; (271) 69=
+6.33&nbsp; (272) 697.33&nbsp; (275) 698.33 ] z:1\&quot; -&gt; \&quot;(10) [=
+&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;red\&quo=
+t;,label=3D\&quot;124.8\&quot;,weight=3D\&quot;124.79999999999968\&quot;];\=
+n\&quot;(2) [&nbsp; (272) 697.33&nbsp; (273) 697.66 ] z:3\&quot; -&gt; \&qu=
+ot;(5) [&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot;[color=3D\&quot;r=
+ed\&quot;,label=3D\&quot;115.3\&quot;,weight=3D\&quot;115.2999999999997\&qu=
+ot;];
+\&quot;(2) [&nbsp; (272) 697.33&nbsp; (273) 697.66 ] z:3\&quot; -&gt=
+; \&quot;(6) [&nbsp; (273) 697.66&nbsp; (274) 698.0&nbsp; (275) 698.33 ] z:=
+3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;173.1\&quot;,weight=3D\&q=
+uot;173.1\&quot;];
+\&quot;(2) [&nbsp; (272) 697.33&nbsp; (273) 697.66 ] z:=
+3\&quot; -&gt; \&quot;(7) [&nbsp; (273) 697.66&nbsp; (276) 698.66 ] z:1\&qu=
+ot;[color=3D\&quot;red\&quot;,label=3D\&quot;119.5\&quot;,weight=3D\&quot;1=
+19.4999999999997\&quot;];
+\&quot;(2) [&nbsp; (272) 697.33&nbsp; (273) 697.=
+66 ] z:3\&quot; -&gt; \&quot;(8) [&nbsp; (274) 698.0&nbsp; (275) 698.33 ] z=
+:3\&quot;[color=3D\&quot;black\&quot;,label=3D\&quot;120.1\&quot;,weight=3D=
+\&quot;120.09999999999967\&quot;];
+\&quot;(2) [&nbsp; (272) 697.33&nbsp; (=
+273) 697.66 ] z:3\&quot; -&gt; \&quot;(9) [&nbsp; (274) 698.0&nbsp; (275) 6=
+98.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;black\&quot;,label=3D\=
+&quot;186.6\&quot;,weight=3D\&quot;186.6\&quot;];
+\&quot;(2) [&nbsp; (272)=
+ 697.33&nbsp; (273) 697.66 ] z:3\&quot; -&gt; \&quot;(10) [&nbsp; (275) 698=
+.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;black\&quot;,label=3D\&q=
+uot;124.8\&quot;,weight=3D\&quot;124.79999999999968\&quot;];
+\&quot;(3) [&=
+nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot; -&gt; =
+\&quot;(5) [&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot;[color=3D\&qu=
+ot;red\&quot;,label=3D\&quot;115.3\&quot;,weight=3D\&quot;115.2999999999997=
+\&quot;];
+\&quot;(3) [&nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp; (274) 6=
+98.0 ] z:3\&quot; -&gt; \&quot;(6) [&nbsp; (273) 697.66&nbsp; (274) 698.0&n=
+bsp; (275) 698.33 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;173=
+.1\&quot;,weight=3D\&quot;173.1\&quot;];
+\&quot;(3) [&nbsp; (272) 697.33&n=
+bsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot; -&gt; \&quot;(7) [&nbsp; (=
+273) 697.66&nbsp; (276) 698.66 ] z:1\&quot;[color=3D\&quot;red\&quot;,label=
+=3D\&quot;119.5\&quot;,weight=3D\&quot;119.4999999999997\&quot;];
+\&quot;(=
+3) [&nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot; -=
+&gt; \&quot;(8) [&nbsp; (274) 698.0&nbsp; (275) 698.33 ] z:3\&quot;[color=
+=3D\&quot;red\&quot;,label=3D\&quot;120.1\&quot;,weight=3D\&quot;120.099999=
+99999967\&quot;];
+\&quot;(3) [&nbsp; (272) 697.33&nbsp; (273) 697.66&nbsp;=
+ (274) 698.0 ] z:3\&quot; -&gt; \&quot;(9) [&nbsp; (274) 698.0&nbsp; (275) =
+698.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&=
+quot;186.6\&quot;,weight=3D\&quot;186.6\&quot;];
+\&quot;(3) [&nbsp; (272) =
+697.33&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot; -&gt; \&quot;(10) =
+[&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;black\&=
+quot;,label=3D\&quot;124.8\&quot;,weight=3D\&quot;124.79999999999968\&quot;=
+];
+\&quot;(4) [&nbsp; (272) 697.33&nbsp; (275) 698.33 ] z:1\&quot; -&gt; \=
+&quot;(10) [&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&q=
+uot;red\&quot;,label=3D\&quot;124.8\&quot;,weight=3D\&quot;124.799999999999=
+68\&quot;];
+\&quot;(5) [&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\&quot;=
+ -&gt; \&quot;(8) [&nbsp; (274) 698.0&nbsp; (275) 698.33 ] z:3\&quot;[color=
+=3D\&quot;red\&quot;,label=3D\&quot;120.1\&quot;,weight=3D\&quot;120.099999=
+99999967\&quot;];
+\&quot;(5) [&nbsp; (273) 697.66&nbsp; (274) 698.0 ] z:3\=
+&quot; -&gt; \&quot;(9) [&nbsp; (274) 698.0&nbsp; (275) 698.33&nbsp; (276) =
+698.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;186.6\&quot;,w=
+eight=3D\&quot;186.6\&quot;];
+\&quot;(5) [&nbsp; (273) 697.66&nbsp; (274) =
+698.0 ] z:3\&quot; -&gt; \&quot;(10) [&nbsp; (275) 698.33&nbsp; (276) 698.6=
+6 ] z:3\&quot;[color=3D\&quot;black\&quot;,label=3D\&quot;124.8\&quot;,weig=
+ht=3D\&quot;124.79999999999968\&quot;];
+\&quot;(6) [&nbsp; (273) 697.66&nb=
+sp; (274) 698.0&nbsp; (275) 698.33 ] z:3\&quot; -&gt; \&quot;(8) [&nbsp; (2=
+74) 698.0&nbsp; (275) 698.33 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=
+=3D\&quot;120.1\&quot;,weight=3D\&quot;120.09999999999967\&quot;];
+\&quot;=
+(6) [&nbsp; (273) 697.66&nbsp; (274) 698.0&nbsp; (275) 698.33 ] z:3\&quot; =
+-&gt; \&quot;(9) [&nbsp; (274) 698.0&nbsp; (275) 698.33&nbsp; (276) 698.66 =
+] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;186.6\&quot;,weight=
+=3D\&quot;186.6\&quot;];
+\&quot;(6) [&nbsp; (273) 697.66&nbsp; (274) 698.0=
+&nbsp; (275) 698.33 ] z:3\&quot; -&gt; \&quot;(10) [&nbsp; (275) 698.33&nbs=
+p; (276) 698.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&quot;124.8=
+\&quot;,weight=3D\&quot;124.79999999999968\&quot;];
+\&quot;(8) [&nbsp; (27=
+4) 698.0&nbsp; (275) 698.33 ] z:3\&quot; -&gt; \&quot;(10) [&nbsp; (275) 69=
+8.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&quot;red\&quot;,label=3D\&qu=
+ot;124.8\&quot;,weight=3D\&quot;124.79999999999968\&quot;];
+\&quot;(9) [&n=
+bsp; (274) 698.0&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot; -&gt; \=
+&quot;(10) [&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:3\&quot;[color=3D\&q=
+uot;red\&quot;,label=3D\&quot;124.8\&quot;,weight=3D\&quot;124.799999999999=
+68\&quot;];
+start -&gt; \&quot;(0) [&nbsp; (271) 696.33&nbsp; (272) 697.33=
+ ] z:1\&quot;[color=3D\&quot;black\&quot;,label=3D\&quot;112.6\&quot;,weigh=
+t=3D\&quot;112.59999999999971\&quot;];
+start -&gt; \&quot;(1) [&nbsp; (271=
+) 696.33&nbsp; (272) 697.33&nbsp; (275) 698.33 ] z:1\&quot;[color=3D\&quot;=
+black\&quot;,label=3D\&quot;170.4\&quot;,weight=3D\&quot;170.39999999999998=
+\&quot;];
+\&quot;(7) [&nbsp; (273) 697.66&nbsp; (276) 698.66 ] z:1\&quot; =
+-&gt; end[color=3D\&quot;black\&quot;,label=3D\&quot;0.0\&quot;,weight=3D\&=
+quot;0.0\&quot;];
+\&quot;(10) [&nbsp; (275) 698.33&nbsp; (276) 698.66 ] z:=
+3\&quot; -&gt; end[color=3D\&quot;black\&quot;,label=3D\&quot;0.0\&quot;,we=
+ight=3D\&quot;0.0\&quot;];
+}
